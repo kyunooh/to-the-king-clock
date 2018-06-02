@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To The King Clock</title>
+    <link rel="stylesheet" href="to-the-king.css">
+    <style>
+        @font-face {
+            font-family: "alarm-clock";
+            src: url("alarm_clock.ttf");
+        }
+
+        body {
+            background: black;
+            text-align: center;
+            vertical-align: middle;
+            height: 100vh;
+
+        }
+
+        #to-the-king-clock {
+            font-family: "alarm-clock";
+            color: green;
+            font-size: 20.5vw;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="to-the-king-clock"></div>
+    <script>
+        var time = 0;
+        var clock = document.getElementById("to-the-king-clock");
+
+        var formTime = function(time) {
+            if (time < 10) {
+                return "0" + time;
+            }
+            return time;
+        };
+
+        var setTime = function () {
+            var sec = time % 60;
+            var minute =  Math.floor(time / 60 % (60));
+            var hour = Math.floor(time / (60 * 60));
+
+            clock.innerText = formTime(hour) + ":" + formTime(minute) + ":" + formTime(sec);
+        };
+
+        setInterval(function () {
+            time += 1;
+            setTime();
+        }, 1000);
+    </script>
+
+</body>
+</html>
