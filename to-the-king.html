@@ -37,7 +37,7 @@
 <body>
     <div id="to-the-king-clock"></div>
     <script>
-        var time = 0;
+        var startTime = new Date();
         var clock = document.getElementById("to-the-king-clock");
 
         var formTime = function(time) {
@@ -48,6 +48,7 @@
         };
 
         var setTime = function () {
+            var time = Math.floor((new Date() - startTime)/1000)
             var sec = time % 60;
             var minute =  Math.floor(time / 60 % (60));
             var hour = Math.floor(time / (60 * 60));
@@ -55,8 +56,8 @@
             clock.innerText = formTime(hour) + ":" + formTime(minute) + ":" + formTime(sec);
         };
 
+        setTime();
         setInterval(function () {
-            time += 1;
             setTime();
         }, 1000);
     </script>
