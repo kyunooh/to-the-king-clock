@@ -15,6 +15,7 @@
             text-align: center;
             vertical-align: middle;
             height: 100vh;
+            position:relative;
 
         }
 
@@ -26,13 +27,49 @@
             top: 50%;
             transform: translateY(-50%);
         }
+
+        #menu {
+            display: none;
+            position: absolute;
+            
+        }
+
+        #menu div  {
+            background: gray;
+            color: white;
+            text-align: left;
+            padding-left: 5px;
+        }
+
+        #menu div:hover {
+            background: white;
+            color: black;
+        }
+
+        #menu div a {
+            background: gray;
+            color: white;
+            text-decoration: none;            
+        }
+        #menu div a:hover {
+            background: white;
+            color: black;         
+        }
     </style>
 </head>
 <body>
     <div id="to-the-king-clock"></div>
+    <div id="menu">
+        <div id="pause">Pause</div>
+        <div id="reset">Reset</div>        
+        <div id="project" style="border-top: 1px solid black; margin-top: 1px;"><a href="https://github.com/kyunooh/to-the-king-clock" target="_blank">To the King Clock / by Kyunooh</a></div>
+    </div>
     <script>
         var startTime = new Date();
         var clock = document.getElementById("to-the-king-clock");
+        var isPause = false;            
+        var menu = document.getElementById("menu");
+        var pauseTime = 0;
 
         var formTime = function(time) {
             if (time < 10) {
@@ -41,7 +78,13 @@
             return time;
         };
 
-        var setTime = function () {
+        var reset = function() {
+            startTime = new Date();
+            menu.style.display = "none";
+        };
+
+        var setTime = function() {
+
             var time = Math.floor((new Date() - startTime)/1000)
             var sec = time % 60;
             var minute =  Math.floor(time / 60 % (60));
@@ -51,9 +94,50 @@
         };
 
         setTime();
-        setInterval(function () {
-            setTime();
-        }, 1000);
+        var interval = setInterval(setTime, 500);
+
+        var pauseAndStart = function() {
+            var pauseEl = document.getElementById("pause");
+            if(isPause) {
+                isPause = false;
+                var term = new Date() - pauseTime;
+                startTime = new Date(startTime.getTime() + term);
+                pauseEl.innerText = "Pause";
+                interval = setInterval(setTime, 500);
+            } else {
+                isPause = true;
+                pauseTime = new Date();
+                pauseEl.innerText = "Start";
+                clearInterval(interval);
+            }
+            menu.style.display = "none";
+        };
+
+        document.body.addEventListener("contextmenu", function(e) {
+            e.preventDefault();
+            menu.style.display = "block";
+            menu.style.top = e.clientY + "px";
+            menu.style.left = e.clientX + "px";
+        });
+
+        document.getElementById("pause").onclick = function(e) {
+            e.stopPropagation();
+            pauseAndStart();
+        };
+
+        document.getElementById("reset").onclick = function(e) {
+            e.stopPropagation();
+            reset();
+        };
+
+       
+        document.body.addEventListener("click", function(e) {
+            menu.style.display = "none";
+            pauseAndStart();
+        });
+
+
+
     </script>
 
 </body>
