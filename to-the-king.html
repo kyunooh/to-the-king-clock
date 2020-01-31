@@ -11,12 +11,14 @@
         
         body {
             overflow: hidden;
-            background: black;
             text-align: center;
             vertical-align: middle;
             height: 100vh;
             position:relative;
+            background: rgba(0, 0, 0, 0);
+            margin: 0 auto;
         }
+
         #to-the-king-clock {
             font-family: "to-the-king";
             color: #00ff00;
@@ -25,21 +27,25 @@
             top: 50%;
             transform: translateY(-50%);
         }
+
         #menu {
             display: none;
             position: absolute;
             
         }
+
         #menu div  {
             background: gray;
             color: white;
             text-align: left;
             padding-left: 5px;
         }
+
         #menu div:hover {
             background: white;
             color: black;
         }
+
         #menu div a {
             background: gray;
             color: white;
@@ -55,8 +61,7 @@
     <div id="to-the-king-clock"></div>
     <div id="menu">
         <div id="pause">Pause</div>
-        <div id="reset">Reset</div> 
-        <div id="setting-custom-time">Setting time</div>        
+        <div id="reset">Reset</div>        
         <div id="project" style="border-top: 1px solid black; margin-top: 1px;"><a href="https://github.com/kyunooh/to-the-king-clock" target="_blank">To the King Clock / by Kyunooh</a></div>
     </div>
     <script>
@@ -65,40 +70,49 @@
         var isPause = false;            
         var menu = document.getElementById("menu");
         var pauseTime = 0;
+
         var formTime = function(time) {
             if (time < 10) {
                 return "0" + time;
             }
             return time;
         };
+
         var reset = function() {
             startTime = new Date();
             menu.style.display = "none";
         };
 
         var setTime = function() {
-            var time = Math.floor((new Date() - startTime)/1000)
+
+            var time = Math.floor((new Date() - startTime)/1000);
             var sec = time % 60;
             var minute =  Math.floor(time / 60 % (60));
             var hour = Math.floor(time / (60 * 60));
+
             clock.innerText = formTime(hour) + ":" + formTime(minute) + ":" + formTime(sec);
         };
 
-        var settingCustomTime = function() {
+        setTime();
+        var interval = setInterval(setTime, 500);
+
+        var settingCustomTime = function(customTime) {
             menu.style.display = "none";
-            var customTime = prompt("Time format is 'hh:mm:ss' ex)12:34:56");
+            if(!customTime) {
+                customTime = prompt("Time format is 'hh:mm:ss' ex)12:34:56");
+            }
             var reg = "([0-9]{1,3}):([0-9]{1,2}):([0-9]{1,2})";
             var timeChecker = new RegExp(reg, "gi");
-            
+
             if(!timeChecker.test(customTime)) {
                 alert("Time format is wrong");
-                return false;                
+                return false;
             }
 
             timeChecker = timeChecker = new RegExp(reg, "gi");
 
             var timeGroups = timeChecker.exec(customTime);
-            
+
             var hours = parseInt(timeGroups[1]);
             var minutes = parseInt(timeGroups[2]);
             var seconds = parseInt(timeGroups[3]);
@@ -106,8 +120,12 @@
         };
 
 
-        setTime();
-        var interval = setInterval(setTime, 500);
+        var queries = new URLSearchParams(location.href);
+        if(queries.has("time") && queries.get("time")) {
+            settingCustomTime(queries.get("time"));
+        }
+
+
         var pauseAndStart = function() {
             var pauseEl = document.getElementById("pause");
             if(isPause) {
@@ -124,30 +142,32 @@
             }
             menu.style.display = "none";
         };
+
         document.body.addEventListener("contextmenu", function(e) {
             e.preventDefault();
             menu.style.display = "block";
             menu.style.top = e.clientY + "px";
             menu.style.left = e.clientX + "px";
         });
+
         document.getElementById("pause").onclick = function(e) {
             e.stopPropagation();
             pauseAndStart();
         };
+
         document.getElementById("reset").onclick = function(e) {
             e.stopPropagation();
             reset();
         };
-       
-        document.getElementById("setting-custom-time").onclick = function(e) {
-            e.stopPropagation();
-            settingCustomTime();
-        };
+
        
         document.body.addEventListener("click", function(e) {
             menu.style.display = "none";
             pauseAndStart();
         });
+
+
+
     </script>
 
 </body>
