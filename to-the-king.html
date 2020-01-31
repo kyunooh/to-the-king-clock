@@ -11,12 +11,12 @@
         
         body {
             overflow: hidden;
-            background: black;
             text-align: center;
             vertical-align: middle;
             height: 100vh;
             position:relative;
-
+            background: rgba(0, 0, 0, 0);
+            margin: 0 auto;
         }
 
         #to-the-king-clock {
@@ -85,7 +85,7 @@
 
         var setTime = function() {
 
-            var time = Math.floor((new Date() - startTime)/1000)
+            var time = Math.floor((new Date() - startTime)/1000);
             var sec = time % 60;
             var minute =  Math.floor(time / 60 % (60));
             var hour = Math.floor(time / (60 * 60));
@@ -135,6 +135,7 @@
             menu.style.display = "none";
             pauseAndStart();
         });
+
 
 
 
