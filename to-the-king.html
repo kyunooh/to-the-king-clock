@@ -61,7 +61,8 @@
     <div id="to-the-king-clock"></div>
     <div id="menu">
         <div id="pause">Pause</div>
-        <div id="reset">Reset</div>        
+        <div id="reset">Reset</div>
+        <div id="setting-custom-time">Setting time</div>
         <div id="project" style="border-top: 1px solid black; margin-top: 1px;"><a href="https://github.com/kyunooh/to-the-king-clock" target="_blank">To the King Clock / by Kyunooh</a></div>
     </div>
     <script>
@@ -166,7 +167,10 @@
             pauseAndStart();
         });
 
-
+        document.getElementById("setting-custom-time").onclick = function(e) {
+            e.stopPropagation();
+            settingCustomTime();
+        };
 
     </script>
 
