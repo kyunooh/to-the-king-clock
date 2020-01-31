@@ -119,8 +119,8 @@
             startTime = new Date(new Date() - ((hours * 3600) + (minutes * 60) + seconds) * 1000);
         };
 
-
-        var queries = new URLSearchParams(location.href);
+        var url = new URL(location.href);
+        var queries = new URLSearchParams(url.search);
         if(queries.has("time") && queries.get("time")) {
             settingCustomTime(queries.get("time"));
         }
